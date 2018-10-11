@@ -38,7 +38,7 @@ From your WordPress dashboard
 1. **Visit** Netlify > Site-Name > Settings
 2. **Copy** APP_ID and paste into the `Netlify site_id` field
 
-[![Netlify Site Info](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-13.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+[![Netlify Site Info](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-3.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ### Netlify API Key
 1. **Visit** Netlify > OAuth Applications > Personal Access Tokens
