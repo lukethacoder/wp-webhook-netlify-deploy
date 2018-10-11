@@ -1,17 +1,17 @@
 <?php
 
 /**
- *  @package Deploy Webhook Button
+ *  @package Netlify Webhook Deploy
  */
 /*
-Plugin Name: Deploy Webhook Button
-Plugin URI: https://github.com/lukethacoder/deploy-webhook-button
+Plugin Name: Netlify Webhook Deploy
+Plugin URI: https://github.com/lukethacoder/netlify-webhook-deploy
 Description: Adds a Build Website button that sends a webhook request to build a netlify hosted website when clicked
 Version: 0.1.0
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
-Text Domain: deploy-webook-button
+Text Domain: netlify-webhook-deploy
 */
 
 /* 
@@ -45,7 +45,7 @@ class deployWebhook {
 
     public function plugin_settings_page_content() {?>
     	<div class="wrap">
-    		<h2>Deploy Webhook Settings Page</h2>
+    		<h2>Netlify Webhook Deploy</h2>
             <hr><?php
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ){
                   $this->admin_notice();

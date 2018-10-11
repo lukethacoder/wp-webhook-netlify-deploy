@@ -33,6 +33,12 @@ From your WordPress dashboard
 5. **Enter** enter your site_id, webhook POST address, Netlify API Key, and User-Agent
 6. **Read** the documentation to [get started](https://github.com/lukethacoder/deploy-webhook-button)
 
+
+== Screenshots ==
+
+1. Settings Page.
+
+
 == Changelog ==
 
 = 0.1.0 =
