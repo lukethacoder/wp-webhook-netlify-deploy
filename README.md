@@ -13,7 +13,6 @@ Easily deploy static sites using Wordpress and Netlify
 ## Links
 * [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 * [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
-* [Author](https://lukesecomb.digital)
 
 ---
 
@@ -65,4 +64,4 @@ From your WordPress dashboard
 #### 0.1.0
 * Initial Release
 
-View full changelog: https://github.com/lukethacoder/deploy-webhook-button
+View full changelog: [here](https://github.com/lukethacoder/deploy-webhook-button)
