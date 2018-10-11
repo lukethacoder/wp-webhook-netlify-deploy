@@ -16,12 +16,15 @@ Easily deploy static sites using Wordpress and Netlify
 
 From your WordPress dashboard
 
-1. **Visit** Plugins > Add New
-2. **Search** for "Deploy Webhook Button"
-3. **Activate** Deploy Webhook Button from your Plugins page
-4. **Click** on the new menu item "Deploy Webhook Button" and enter your site details/keys
-5. **Enter** enter your site_id, webhook POST address, Netlify API Key, and User-Agent
-6. **Read** the documentation to [get started](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+1. ~~**Visit** Plugins > Add New~~
+2. ~~**Search** for "Deploy Webhook Button"~~
+3. ~~**Activate** Deploy Webhook Button from your Plugins page~~
+4. **Download** this repo 
+5. **Upload** the plugin to your WordPress instance 
+6. **Activate** the plugin 
+7. **Click** on the new menu item "Deploy Webhook Button" and enter your site details/keys
+8. **Enter** enter your site_id, webhook POST address, Netlify API Key, and User-Agent
+9. **Read** the documentation to [get started](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ---
 
