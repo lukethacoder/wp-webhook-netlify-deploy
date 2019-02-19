@@ -1,0 +1,31 @@
+{
+  "name": "wp-netlify-webhook-deploy",
+  "version": "1.0.0",
+  "description": "Easily deploy static sites using Wordpress and Netlify",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukethacoder/wp-netlify-webhook-deploy.git"
+  },
+  "author": "Luke Secomb",
+  "license": "GPLv3 or later",
+  "bugs": {
+    "url": "https://github.com/lukethacoder/wp-netlify-webhook-deploy/issues"
+  },
+  "homepage": "https://github.com/lukethacoder/wp-netlify-webhook-deploy#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-sourcemaps": "^2.6.4"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1"
+  }
+}
