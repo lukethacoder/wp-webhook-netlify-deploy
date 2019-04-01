@@ -11,7 +11,7 @@ Version: 0.1.0
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
-Text Domain: netlify-webhook-deploy
+Text Domain: webhook-netlify-deploy
 */
 
 /* 
@@ -45,8 +45,51 @@ class deployWebhook {
 
     public function plugin_settings_page_content() {?>
     	<div class="wrap">
-    		<h2>Netlify Webhook Deploy</h2>
-            <hr><?php
+    		<h2>Webhook Netlify Deploy</h2>
+            <hr>
+
+            <h3>Build Website</h3>
+            <button id="build_button" class="button button-primary" name="submit" type="submit">Build Site</button><br>
+            <p id="build_status" style="font-size: 12px; margin: 0;"></p>
+            <p style="font-size: 12px">*Do not abuse the Build Site button*</p><br>
+            
+            <hr>
+
+            <h3>Deploy Status</h3>
+            <button id="status_button" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">Get Deploys Status</button>
+            
+            <div style="margin: 0 0 16px;">
+                <a id="build_img_link" href="https://app.netlify.com/sites/dvlp-haus/deploys">
+                    <img id="build_img" src=""/>
+                </a>
+            </div>
+            <div>
+                <!-- <p id="deploy_status"></p> -->
+                <p id="deploy_id"></p>
+                <!-- <p id="deploy_current_time"></p> -->
+                <div style="display: flex;"><p id="deploy_finish_time"></p><p id="deploy_loading"></p></div>
+                <p id="deploy_ssl_url"></p>
+            </div>
+
+            <div id="deploy_preview">
+            
+            </div>
+
+            <hr>
+
+            <h3>Previous Builds</h3>
+            <button id="previous_deploys" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">Get All Previous Deploys</button>
+            <ul id="previous_deploys_container" style="list-style: none;"></ul>
+    	</div> <?php
+    }
+
+    public function plugin_settings_subpage_content() {?>
+    	<div class="wrap">
+    		<h1>Developer Settings</h1>
+    		<p>Do not change this if you dont know what you are doing</p>
+            <hr>
+
+            <?php
             if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ){
                   $this->admin_notice();
             } ?>
@@ -58,27 +101,6 @@ class deployWebhook {
                 ?>
     		</form>
 
-            <hr>
-
-            <h3>Build Website</h3>
-            <button id="build_button" name="submit" type="submit">Build Site</button><br>
-            <p style="font-size: 12px">*Do not abuse the Build Site button*</p><br>
-            
-            <hr>
-
-            <h3>Deploy Status</h3>
-            <button id="status_button" name="submit" type="submit">Get Deploys Status</button>
-            <p style="font-size: 12px">*Returns deploy status and data*</p>
-            <div>
-                <p id="id">ID: </p>
-                <p id="status">Status: </p>
-                <p id="current_time">Current Date/Time: </p>
-                <p id="deploy_finish_time">Build Completed: </p>
-                <p id="deploy_ssl_url">Deploy URL: </p>
-            </div>
-
-            <hr>
-
             <footer>
                 <h3>Extra Info</h3>
                 <p><a href="https://github.com.au">Plugin Docs</a></p>
@@ -89,11 +111,9 @@ class deployWebhook {
     }
 
     public function run_the_mighty_javascript() {
-        echo get_option('webhook_address');
         ?>
         <script type="text/javascript" >
         jQuery(document).ready(function($) {
-            console.log('jQuery loaded');
             var _this = this;
             $( "td > input" ).css( "width", "100%");
     
@@ -105,6 +125,58 @@ class deployWebhook {
             var netlifySites = "https://api.netlify.com/api/v1/sites/";
             var req_url = netlifySites + netlify_site_id + '/deploys?access_token=' + netlify_api_key;
 
+            function getDeployData() {
+                $.ajax({
+                    type: "GET",
+                    url: req_url
+                }).done(function(data) {
+                    appendStatusData(data[0]);
+                })
+                .fail(function() {
+                    console.error("error res => ", this)
+                })
+            }
+
+            function getAllPreviousBuilds() {
+                $.ajax({
+                    type: "GET",
+                    url: req_url
+                }).done(function(data) {
+                    var buildNo = 1;
+                    data.forEach(function(item) {
+                        var deploy_preview_url = '';
+                        if (data.deploy_ssl_url) {
+                            deploy_preview_url = data.deploy_ssl_url
+                        } else {
+                            deploy_preview_url = data.deploy_url
+                        }
+                        $('#previous_deploys_container').append(
+                            '<li style="margin: 0 auto 16px"><hr><h3>No: ' + buildNo + ' - ' + item.name + '</h3><h4>Created at: ' + item.created_at + '</h4><h4>' + item.title + '</h4><p>Id: ' + item.id + '</p><p>Deploy Time: ' + item.deploy_time + '</p><p>Branch: ' + item.branch + '</p><a href="' + item.deploy_preview_url + '">Preview Build</a></li>'
+                        );
+                        buildNo++;
+                    })
+                })
+                .fail(function() {
+                    console.error("error res => ", this)
+                })
+            }
+
+            function runSecondFunc() {
+
+                $.ajax({
+                    type: "GET",
+                    url: req_url
+                }).done(function(data) {
+                    $( "#build_img_link" ).attr("href", `${data.admin_url}`);
+                    // $( "#build_img" ).attr("src", `https://api.netlify.com/api/v1/badges/${ netlify_site_id }/deploy-status`);
+                })
+                .fail(function() {
+                    console.error("error res => ", this)
+                })
+
+                // $( "#build_status" ).html('Deploy building');
+            }
+
             function appendStatusData(data) {
                 var d = new Date();
                 var p = d.toLocaleString();
@@ -115,27 +187,61 @@ class deployWebhook {
                     current_state = "Success"
                 }
 
-                $( "#id" ).html( "<p>ID: " + data.id + "</p>");
-                $( "#status" ).html( "<p>Status: " + current_state + "</p>");
-                $( "#current_time" ).html( "<p>Current Date/Time: " + p + "</p>");
-                $( "#deploy_finish_time" ).html( "<p>Build Completed: " + created + "</p>");
-                $( "#deploy_ssl_url" ).html( "<p>Deploy URL: <a href='" + data.deploy_ssl_url + "'>" + data.deploy_ssl_url + "</a></p>");
+                // $( "#deploy_id" ).html( "ID: " + data.id + "" );
+                // $( "#build_img_link" ).attr("href", data.admin_url);
+                // $( "#build_img" ).attr("src", data.admin_url);
+                // $( "#deploy_status" ).html( "Status: " + current_state );
+                // $( "#deploy_current_time" ).html( "Current Date/Time: " + p );
+                if (data.state !== 'ready') {
+                    $( "#deploy_finish_time" ).html( "Building Site" );
+                    $( "#build_img" ).attr("src", `https://api.netlify.com/api/v1/badges/${ netlify_site_id }/deploy-status`);
+                    var dots = window.setInterval( function() {
+                        var wait = document.getElementById('deploy_loading');
+                        if ( wait.innerHTML.length >= 3 ) {
+                            wait.innerHTML = "";
+                        }
+                        else {
+                            wait.innerHTML += ".";
+                        }
+                    },
+                    500);
+                } else {
+                    var deploy_preview_url = '';
+                    if (data.deploy_ssl_url) {
+                        deploy_preview_url = data.deploy_ssl_url
+                    } else {
+                        deploy_preview_url = data.deploy_url
+                    }
+                    $( "#deploy_id" ).html( "ID: " + data.id + "" );
+                    $( "#deploy_finish_time" ).html( "Build Completed: " + created );
+                    $( "#build_img" ).attr("src", `https://api.netlify.com/api/v1/badges/${ netlify_site_id }/deploy-status`);
+                    $( "#deploy_ssl_url" ).html( "Deploy URL: <a href='" + deploy_preview_url + "'>" + data.deploy_ssl_url + "</a>");
+                    $( "#deploy_preview" ).html( `<iframe style="width: 100%; min-height: 540px" id="frameLeft" src="${deploy_preview_url}"/>`)
+                }
+                
+            
             }
 
             $("#status_button").on("click", function(e) {
                 e.preventDefault();
-                $.ajax({
-                    type: "GET",
-                    url: req_url
-                }).done(function(data) {
-                    appendStatusData(data[0]);
-                })
-                .fail(function() {
-                    console.error("error res => ", this)
-                })
+                getDeployData();
+            });
+
+            $("#previous_deploys").on("click", function(e) {
+                e.preventDefault();
+                getAllPreviousBuilds();
             });
 
             $("#build_button").on("click", function(e) {
+
+                // hide deploy
+                $('#build_img_link').attr('href', '');
+                $('#build_img').attr('src', '');
+                $('#deploy_id').html('');
+                $('#deploy_finish_time').html('');
+                $('#deploy_ssl_url').html('');
+                $('#deploy_preview').html('');
+
                 e.preventDefault();
                 $.ajax({
                     type: "POST",
@@ -146,9 +252,12 @@ class deployWebhook {
                     }
                 }).done(function() {
                     console.log("success")
+                    getDeployData();
+                    $( "#build_status" ).html('Deploy building');
                 })
                 .fail(function() {
                     console.error("error res => ", this)
+                    $( "#build_status" ).html('There seems to be an error with the build', this);
                 })
             });
         });
@@ -157,15 +266,25 @@ class deployWebhook {
 
     public function create_plugin_settings_page() {
     	// Add the menu item and page
-    	$page_title = 'Deploy Webhook Settings Page';
-    	$menu_title = 'Deploy Webhook';
+    	$page_title = 'Deploy to Netlify';
+    	$menu_title = 'Deploy Webhook ';
     	$capability = 'manage_options';
     	$slug = 'deploy_webhook_fields';
     	$callback = array( $this, 'plugin_settings_page_content' );
     	$icon = 'dashicons-admin-plugins';
-    	$position = 100;
+        $position = 100;
+
+        $sub_page_title = 'Developer Settings';
+    	$sub_menu_title = 'Developer Settings';
+    	$sub_capability = 'manage_options';
+    	$sub_slug = 'deploy_webhook_fields_sub';
+    	$sub_callback = array( $this, 'plugin_settings_subpage_content' );
+    	$sub_icon = 'dashicons-admin-plugins';
+        $sub_position = 100;
+        
 
     	add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
+    	add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback, $sub_icon, $sub_position );
     }
     
     public function admin_notice() { ?>
@@ -222,7 +341,6 @@ class deployWebhook {
         	)
         );
     	foreach( $fields as $field ){
-
         	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'deploy_webhook_fields', $field['section'], $field );
             register_setting( 'deploy_webhook_fields', $field['uid'] );
     	}
