@@ -1,13 +1,13 @@
 <?php
 
 /**
- *  @package Netlify Webhook Deploy
+ *  @package Webhook Netlify Deploy
  */
 /*
-Plugin Name: Netlify Webhook Deploy
-Plugin URI: https://github.com/lukethacoder/netlify-webhook-deploy
+Plugin Name: Webhook Netlify Deploy
+Plugin URI: http://github.com/lukethacoder/wp-webhook-deploy-netlify
 Description: Adds a Build Website button that sends a webhook request to build a netlify hosted website when clicked
-Version: 0.1.0
+Version: 0.1.2
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
@@ -267,7 +267,7 @@ class deployWebhook {
     public function create_plugin_settings_page() {
     	// Add the menu item and page
     	$page_title = 'Deploy to Netlify';
-    	$menu_title = 'Deploy Webhook ';
+    	$menu_title = 'Webhook Deploy';
     	$capability = 'manage_options';
     	$slug = 'deploy_webhook_fields';
     	$callback = array( $this, 'plugin_settings_page_content' );
