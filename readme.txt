@@ -2,7 +2,7 @@
 Contributors: lukesecomb
 Tags: webhook, netlify, deploy, gatsbyjs, static, build
 Requires at least: 4.4.0
-Tested up to: 4.9.9
+Tested up to: 5.2.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ From your WordPress dashboard
 
 
 == Changelog ==
+
+= 1.0.0 =
+* Fixed UI
+* Seperate Developer Settings and User Build Screen
 
 = 0.1.0 =
 * Initial Release

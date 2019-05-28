@@ -78,6 +78,10 @@ Main Plugin page
 
 ## Changelog
 
+#### 1.0.0
+* Fixed UI
+* Seperate Developer Settings and User Build Screen
+
 #### 0.1.0
 * Initial Release
 
