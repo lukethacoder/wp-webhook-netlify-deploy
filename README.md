@@ -62,7 +62,10 @@ From your WordPress dashboard
 
 Main Plugin page
 
-[![Main Plugin Page](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-1.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+[![Developer Settings Page](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-1.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+
+[![User Page](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-5.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+
 
 
 ---
