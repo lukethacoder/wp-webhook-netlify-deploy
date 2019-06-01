@@ -103,8 +103,8 @@ class deployWebhook {
 
             <footer>
                 <h3>Extra Info</h3>
-                <p><a href="https://github.com.au">Plugin Docs</a></p>
-                <p><a href="https://github.com.au">Project Github</a></p>
+                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy">Plugin Docs</a></p>
+                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy">Project Github</a></p>
             </footer>
 
     	</div> <?php
