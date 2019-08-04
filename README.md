@@ -42,7 +42,7 @@ From your WordPress dashboard
 [![Netlify Site Info](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-3.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ### Netlify API Key
-1. **Visit** Netlify > OAuth Applications > Personal Access Tokens
+1. **Visit** Netlify > User Settings > Applications > Personal Access Tokens
 2. **Create** A Personal Access Token (or use an existing one)
 3. **Copy** The token and paste into the `Netlify API Key` field
 
