@@ -278,7 +278,7 @@ class deployWebhook {
                 }
 
                 $button.addClass('running').css('opacity', '0.5');
-
+                
                 netlifyDeploy().done(function() {
                     var $badge = $('#admin-bar-netlify-deploy-status-badge');
 
@@ -440,13 +440,25 @@ class deployWebhook {
         $see_deploy_status = apply_filters( 'netlify_status_capability', 'manage_options' );
         $run_deploys = apply_filters( 'netlify_deploy_capability', 'manage_options' );
 
+        if ( current_user_can( $run_deploys ) ) {
+            $webhook_address = get_option( 'webhook_address' );
+
+            if ( $webhook_address ) {
+                $button = array(
+                    'id' => 'netlify-deploy-button',
+                    'title' => '<div style="cursor: pointer;"><span class="ab-icon dashicons dashicons-hammer"></span> <span class="ab-label">Deploy site</span></div>'
+                );
+
+                $admin_bar->add_node( $button );
+            }
+        }
+
         if ( current_user_can( $see_deploy_status ) ) {
             $netlify_site_id = get_option( 'netlify_site_id' );
 
             if ( $netlify_site_id ) {
                 $badge = array(
                     'id' => 'netlify-deploy-status-badge',
-                    'parent' => 'top-secondary',
                     'title' => sprintf( '<div style="display: flex; height: 100%%; align-items: center;">
                             <img id="admin-bar-netlify-deploy-status-badge" src="https://api.netlify.com/api/v1/badges/%s/deploy-status" alt="Netlify deply status" style="width: auto; height: 16px;" />
                         </div>', $netlify_site_id )
@@ -456,20 +468,6 @@ class deployWebhook {
             }
         }
 
-        if ( current_user_can( $run_deploys ) ) {
-            $webhook_address = get_option( 'webhook_address' );
-
-            if ( $webhook_address ) {
-                $button = array(
-                    'id' => 'netlify-deploy-button',
-                    'parent' => 'top-secondary',
-                    'title' => '<span class="ab-icon dashicons
-    dashicons-hammer"></span> <span class="ab-label">Deploy site</span>'
-                );
-
-                $admin_bar->add_node( $button );
-            }
-        }
     }
 
 }
