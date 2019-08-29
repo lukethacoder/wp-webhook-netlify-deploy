@@ -116,7 +116,7 @@ class deployWebhook {
         <script type="text/javascript" >
         jQuery(document).ready(function($) {
             var _this = this;
-            $( "td > input" ).css( "width", "100%");
+            $( ".webhook-deploy_page_deploy_webhook_fields_sub td > input" ).css( "width", "100%");
 
             var webhook_url = '<?php echo(get_option('webhook_address')) ?>';
             var netlify_user_agent = '<?php echo(get_option('netlify_user_agent')) ?>';
@@ -278,7 +278,7 @@ class deployWebhook {
                 }
 
                 $button.addClass('running').css('opacity', '0.5');
-                
+
                 netlifyDeploy().done(function() {
                     var $badge = $('#admin-bar-netlify-deploy-status-badge');
 
