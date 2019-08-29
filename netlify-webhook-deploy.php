@@ -14,7 +14,7 @@ License: GPLv3 or later
 Text Domain: webhook-netlify-deploy
 */
 
-/* 
+/*
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -41,6 +41,7 @@ class deployWebhook {
     	add_action( 'admin_init', array( $this, 'setup_sections' ) );
         add_action( 'admin_init', array( $this, 'setup_fields' ) );
         add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
+        add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
     }
 
     public function plugin_settings_page_content() {?>
@@ -52,12 +53,12 @@ class deployWebhook {
             <button id="build_button" class="button button-primary" name="submit" type="submit">Build Site</button><br>
             <p id="build_status" style="font-size: 12px; margin: 0;"></p>
             <p style="font-size: 12px">*Do not abuse the Build Site button*</p><br>
-            
+
             <hr>
 
             <h3>Deploy Status</h3>
             <button id="status_button" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">Get Deploys Status</button>
-            
+
             <div style="margin: 0 0 16px;">
                 <a id="build_img_link" href="https://app.netlify.com/sites/dvlp-haus/deploys">
                     <img id="build_img" src=""/>
@@ -72,7 +73,7 @@ class deployWebhook {
             </div>
 
             <div id="deploy_preview">
-            
+
             </div>
 
             <hr>
@@ -116,7 +117,7 @@ class deployWebhook {
         jQuery(document).ready(function($) {
             var _this = this;
             $( "td > input" ).css( "width", "100%");
-    
+
             var webhook_url = '<?php echo(get_option('webhook_address')) ?>';
             var netlify_user_agent = '<?php echo(get_option('netlify_user_agent')) ?>';
             var netlify_api_key = '<?php echo(get_option('netlify_api_key'))?>'
@@ -218,8 +219,19 @@ class deployWebhook {
                     $( "#deploy_ssl_url" ).html( "Deploy URL: <a href='" + deploy_preview_url + "'>" + data.deploy_ssl_url + "</a>");
                     $( "#deploy_preview" ).html( `<iframe style="width: 100%; min-height: 540px" id="frameLeft" src="${deploy_preview_url}"/>`)
                 }
-                
-            
+
+
+            }
+
+            function netlifyDeploy() {
+                return $.ajax({
+                    type: "POST",
+                    url: webhook_url,
+                    dataType: "json",
+                    header: {
+                        "User-Agent": netlify_user_agent
+                    }
+                });
             }
 
             $("#status_button").on("click", function(e) {
@@ -243,14 +255,8 @@ class deployWebhook {
                 $('#deploy_preview').html('');
 
                 e.preventDefault();
-                $.ajax({
-                    type: "POST",
-                    url: webhook_url,
-                    dataType: "json",
-                    header: {
-                        "User-Agent": netlify_user_agent
-                    }
-                }).done(function() {
+
+                netlifyDeploy().done(function() {
                     console.log("success")
                     getDeployData();
                     $( "#build_status" ).html('Deploy building');
@@ -258,6 +264,43 @@ class deployWebhook {
                 .fail(function() {
                     console.error("error res => ", this)
                     $( "#build_status" ).html('There seems to be an error with the build', this);
+                })
+            });
+
+            $(document).on('click', '#wp-admin-bar-netlify-deploy-button', function(e) {
+                e.preventDefault();
+
+                var $button = $(this),
+                    $buttonContent = $button.find('.ab-item:first');
+
+                if ($button.hasClass('deploying') || $button.hasClass('running')) {
+                    return false;
+                }
+
+                $button.addClass('running').css('opacity', '0.5');
+                
+                netlifyDeploy().done(function() {
+                    var $badge = $('#admin-bar-netlify-deploy-status-badge');
+
+                    $button.removeClass('running');
+                    $button.addClass('deploying');
+
+                    $buttonContent.find('.ab-label').text('Deploying…');
+
+                    if ($badge.length) {
+                        if (!$badge.data('original-src')) {
+                            $badge.data('original-src', $badge.attr('src'));
+                        }
+
+                        $badge.attr('src', $badge.data('original-src') + '?updated=' + Date.now());
+                    }
+                })
+                .fail(function() {
+                    $button.removeClass('running').css('opacity', '1');
+                    $buttonContent.find('.dashicons-hammer')
+                        .removeClass('dashicons-hammer').addClass('dashicons-warning');
+
+                    console.error("error res => ", this)
                 })
             });
         });
@@ -281,12 +324,12 @@ class deployWebhook {
     	$sub_callback = array( $this, 'plugin_settings_subpage_content' );
     	$sub_icon = 'dashicons-admin-plugins';
         $sub_position = 100;
-        
+
 
     	add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
     	add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback, $sub_icon, $sub_position );
     }
-    
+
     public function admin_notice() { ?>
         <div class="notice notice-success is-dismissible">
             <p>Your settings have been updated!</p>
@@ -389,6 +432,43 @@ class deployWebhook {
                     printf( '<fieldset>%s</fieldset>', $options_markup );
                 }
                 break;
+        }
+    }
+
+    public function add_to_admin_bar( $admin_bar ) {
+
+        $see_deploy_status = apply_filters( 'netlify_status_capability', 'manage_options' );
+        $run_deploys = apply_filters( 'netlify_deploy_capability', 'manage_options' );
+
+        if ( current_user_can( $see_deploy_status ) ) {
+            $netlify_site_id = get_option( 'netlify_site_id' );
+
+            if ( $netlify_site_id ) {
+                $badge = array(
+                    'id' => 'netlify-deploy-status-badge',
+                    'parent' => 'top-secondary',
+                    'title' => sprintf( '<div style="display: flex; height: 100%%; align-items: center;">
+                            <img id="admin-bar-netlify-deploy-status-badge" src="https://api.netlify.com/api/v1/badges/%s/deploy-status" alt="Netlify deply status" style="width: auto; height: 16px;" />
+                        </div>', $netlify_site_id )
+                );
+
+                $admin_bar->add_node( $badge );
+            }
+        }
+
+        if ( current_user_can( $run_deploys ) ) {
+            $webhook_address = get_option( 'webhook_address' );
+
+            if ( $webhook_address ) {
+                $button = array(
+                    'id' => 'netlify-deploy-button',
+                    'parent' => 'top-secondary',
+                    'title' => '<span class="ab-icon dashicons
+    dashicons-hammer"></span> <span class="ab-label">Deploy site</span>'
+                );
+
+                $admin_bar->add_node( $button );
+            }
         }
     }
 
