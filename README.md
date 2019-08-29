@@ -19,7 +19,7 @@ From your WordPress dashboard
 1. **Visit** Plugins > Add New
 2. **Search** for "Deploy Webhook Button"
 3. **Install** plugin
-4. **Activate** the plugin 
+4. **Activate** the plugin
 5. **Click** on the new menu item "Deploy Netlify Webhook" and enter your site details/keys
 6. **Enter** enter your site_id, webhook POST address, Netlify API Key, and User-Agent
 7. **Read** the documentation to [get started](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
@@ -55,6 +55,26 @@ From your WordPress dashboard
 4. Your field should look similar to this `SiteNameNoSpaces (site-name-url.com)`
 
 [![Netlify Site Info](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-3.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+
+---
+
+## Admin Bar
+
+A deploy button and the status badge of the last build is added to the admin bar. By default this will only be displayed to users that can `manage_options`.
+
+You may allow other user roles with these two filters:
+
+```
+add_filter('netlify_status_capability', function() {
+    return 'edit_pages';
+});
+
+add_filter('netlify_deploy_capability', function() {
+    return 'edit_pages';
+});
+```
+
+
 
 ---
 
