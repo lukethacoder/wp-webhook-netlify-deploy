@@ -41,6 +41,12 @@ From your WordPress dashboard
 
 == Changelog ==
 
+= 1.1.0 =
+* Add Deploy Button and Deploy Status to admin bar
+* Add `manage_options` for devs to manage permissions
+* Nice comments in `php` code
+* Remove un-needed `add_submenu_items()` params
+
 = 1.0.0 =
 * Fixed UI
 * Seperate Developer Settings and User Build Screen

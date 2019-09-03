@@ -29,6 +29,7 @@ From your WordPress dashboard
 ## Where do I get the field data from?
 
 ### Webhook Build
+
 1. **Visit** Netlify > Site-Name > Settings > Build & Deploy
 2. **Create** A Build Hook (or use an existing hook)
 3. **Copy** The Build Hook URL into the `Webhook Build URL` field
@@ -36,12 +37,14 @@ From your WordPress dashboard
 [![Webhook Build URL](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-2.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ### Netlify site_id
+
 1. **Visit** Netlify > Site-Name > Settings
 2. **Copy** APP_ID and paste into the `Netlify site_id` field
 
 [![Netlify Site Info](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-3.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ### Netlify API Key
+
 1. **Visit** Netlify > User Settings > Applications > Personal Access Tokens
 2. **Create** A Personal Access Token (or use an existing one)
 3. **Copy** The token and paste into the `Netlify API Key` field
@@ -49,6 +52,7 @@ From your WordPress dashboard
 [![Netlify OAuth Applications](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-1.png)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ### User-Agent Site Value
+
 1. **Visit** Netlify > Site-Name > Settings
 2. **Copy** The Site Name and paste into the `User-Agent Site Value` field
 3. **Add** The site url in brackets to the `User-Agent Site Value` field
@@ -62,7 +66,7 @@ From your WordPress dashboard
 
 A deploy button and the status badge of the last build is added to the admin bar. By default this will only be displayed to users that can `manage_options`.
 
-You may allow other user roles with these two filters:
+You may allow other user roles with these three filters:
 
 ```
 add_filter('netlify_status_capability', function() {
@@ -72,9 +76,11 @@ add_filter('netlify_status_capability', function() {
 add_filter('netlify_deploy_capability', function() {
     return 'edit_pages';
 });
+
+add_filter('netlify_adjust_settings_capability', function() {
+    return 'edit_pages';
+});
 ```
-
-
 
 ---
 
@@ -86,24 +92,31 @@ Main Plugin page
 
 [![User Page](https://github.com/lukethacoder/wp-netlify-webhook-deploy/blob/master/assets/screenshot-5.jpg)](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
-
-
 ---
 
 ## Links
-* [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
-* [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+
+- [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+- [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ---
 
-
 ## Changelog
 
+#### 1.1.0
+
+- Add Deploy Button and Deploy Status to admin bar
+- Add `manage_options` for devs to manage permissions
+- Nice comments in `php` code
+- Remove un-needed `add_submenu_items()` params
+
 #### 1.0.0
-* Fixed UI
-* Seperate Developer Settings and User Build Screen
+
+- Fixed UI
+- Seperate Developer Settings and User Build Screen
 
 #### 0.1.0
-* Initial Release
+
+- Initial Release
 
 View full changelog: [here](https://github.com/lukethacoder/deploy-webhook-button)
