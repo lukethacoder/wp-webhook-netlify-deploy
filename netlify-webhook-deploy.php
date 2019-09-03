@@ -354,10 +354,8 @@ class deployWebhook {
             $sub_capability = 'manage_options';
             $sub_slug = 'deploy_webhook_fields_sub';
             $sub_callback = array( $this, 'plugin_settings_subpage_content' );
-            $sub_icon = 'dashicons-admin-plugins';
-            $sub_position = 100;
 
-            add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback, $sub_icon, $sub_position );
+            add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback );
 
         }
 
