@@ -340,7 +340,7 @@ class deployWebhook {
         if ( current_user_can( $run_deploys ) ) {
             $page_title = 'Deploy to Netlify';
             $menu_title = 'Webhook Deploy';
-            $capability = 'manage_options';
+            $capability = $run_deploys;
             $slug = 'deploy_webhook_fields';
             $callback = array( $this, 'plugin_settings_page_content' );
             $icon = 'dashicons-admin-plugins';
@@ -351,7 +351,7 @@ class deployWebhook {
         if ( current_user_can( $adjust_settings ) ) {
             $sub_page_title = 'Developer Settings';
             $sub_menu_title = 'Developer Settings';
-            $sub_capability = 'manage_options';
+            $sub_capability = $adjust_settings;
             $sub_slug = 'deploy_webhook_fields_sub';
             $sub_callback = array( $this, 'plugin_settings_subpage_content' );
 
