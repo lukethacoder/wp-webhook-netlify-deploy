@@ -44,7 +44,7 @@ class deployWebhook {
 
       // Add Settings and Fields
     	add_action( 'admin_init', array( $this, 'setup_sections' ) );
-      add_action( 'admin_init', array( $this, 'setup_scheduler_fields' ) );
+      add_action( 'admin_init', array( $this, 'setup_schedule_fields' ) );
       add_action( 'admin_init', array( $this, 'setup_developer_fields' ) );
       add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
       add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
@@ -116,20 +116,6 @@ class deployWebhook {
                     submit_button();
                 ?>
         </form>
-
-        <div>
-          <input type="checkbox" id="enable_scheduled_builds" name="enable_scheduled_builds">
-          <label for="enable_scheduled_builds">Enable Scheduled Builds</label>
-        </div>
-        <div>
-          <label for="select_schedule_builds">Choose a scheduling option:</label>
-          <select id="select_schedule_builds">
-            <option value="daily">Daily</option>
-            <option value="weekly">Weekly</option>
-            <option value="monthly">Monthly</option>
-          </select>
-        </div>
-
     	</div> <?php
     }
 
@@ -448,24 +434,31 @@ class deployWebhook {
     }
 
     /**
-    * Fields used for scheduler input data
+    * Fields used for schedule input data
     *
     * @since 1.1.0
     **/
-    public function setup_scheduler_fields() {
+    public function setup_schedule_fields() {
         $fields = array(
           array(
-          'uid' => 'netlify_user_agent',
+          'uid' => 'enable_scheduled_builds',
+          'label' => 'Enable Scheduled Events',
+          'section' => 'schedule_section',
+          'type' => 'checkbox',
+              'options' => ['Enable'],
+              'default' => '',
+          ),
+          array(
+          'uid' => 'select_schedule_builds',
           'label' => 'User-Agent Site Value',
           'section' => 'schedule_section',
-          'type' => 'text',
-              'placeholder' => 'Website Name (and-website-url.netlify.com)',
-              'default' => '',
+          'type' => 'select',
+              'options' => ['Daily', 'Weekly', 'Monthly'],
           ),
         );
     	foreach( $fields as $field ){
-        	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'developer_webhook_fields', $field['section'], $field );
-            register_setting( 'scheduler_webhook_fields', $field['uid'] );
+        	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'schedule_webhook_fields', $field['section'], $field );
+            register_setting( 'schedule_webhook_fields', $field['uid'] );
     	}
     }
 
