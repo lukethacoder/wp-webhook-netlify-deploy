@@ -42,11 +42,12 @@ class deployWebhook {
     	// Hook into the admin menu
     	add_action( 'admin_menu', array( $this, 'create_plugin_settings_page' ) );
 
-        // Add Settings and Fields
+      // Add Settings and Fields
     	add_action( 'admin_init', array( $this, 'setup_sections' ) );
-        add_action( 'admin_init', array( $this, 'setup_fields' ) );
-        add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
-        add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
+      add_action( 'admin_init', array( $this, 'setup_scheduler_fields' ) );
+      add_action( 'admin_init', array( $this, 'setup_developer_fields' ) );
+      add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
+      add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
     }
 
     /**
@@ -92,11 +93,52 @@ class deployWebhook {
     }
 
     /**
+    * Schedule Builds (subpage) markup
+    *
+    * @since 1.1.0
+    **/
+    public function plugin_settings_schedule_content() {?>
+    	<div class="wrap">
+    		<h1>Schedule Netlify Builds</h1>
+    		<p>This section allows regular Netlify builds to be scheduled.</p>
+
+        <hr>
+
+        <?php
+        if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ){
+              $this->admin_notice();
+        } ?>
+
+        <form method="POST" action="options.php">
+                <?php
+                    settings_fields( 'schedule_webhook_fields' );
+                    do_settings_sections( 'schedule_webhook_fields' );
+                    submit_button();
+                ?>
+        </form>
+
+        <div>
+          <input type="checkbox" id="enable_scheduled_builds" name="enable_scheduled_builds">
+          <label for="enable_scheduled_builds">Enable Scheduled Builds</label>
+        </div>
+        <div>
+          <label for="select_schedule_builds">Choose a scheduling option:</label>
+          <select id="select_schedule_builds">
+            <option value="daily">Daily</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+
+    	</div> <?php
+    }
+
+    /**
     * Developer Settings (subpage) markup
     *
     * @since 1.0.0
     **/
-    public function plugin_settings_subpage_content() {?>
+    public function plugin_settings_developer_content() {?>
     	<div class="wrap">
     		<h1>Developer Settings</h1>
     		<p>Do not change this if you dont know what you are doing</p>
@@ -108,8 +150,8 @@ class deployWebhook {
             } ?>
     		<form method="POST" action="options.php">
                 <?php
-                    settings_fields( 'deploy_webhook_fields' );
-                    do_settings_sections( 'deploy_webhook_fields' );
+                    settings_fields( 'developer_webhook_fields' );
+                    do_settings_sections( 'developer_webhook_fields' );
                     submit_button();
                 ?>
     		</form>
@@ -123,7 +165,6 @@ class deployWebhook {
     	</div> <?php
     }
 
-    
     /**
     * The Mighty JavaScript
     *
@@ -132,7 +173,7 @@ class deployWebhook {
     public function run_the_mighty_javascript() {
         // TODO: split up javascript to allow to be dynamically imported as needed
         // $screen = get_current_screen();
-        // if ( $screen && $screen->parent_base != 'deploy_webhook_fields' && $screen->parent_base != 'deploy_webhook_fields_sub' ) {
+        // if ( $screen && $screen->parent_base != 'developer_webhook_fields' && $screen->parent_base != 'deploy_webhook_fields_sub' ) {
         //     return;
         // }
         ?>
@@ -140,7 +181,7 @@ class deployWebhook {
         console.log('run_the_mighty_javascript');
         jQuery(document).ready(function($) {
             var _this = this;
-            $( ".webhook-deploy_page_deploy_webhook_fields_sub td > input" ).css( "width", "100%");
+            $( ".webhook-deploy_page_developer_webhook_fields_sub td > input" ).css( "width", "100%");
 
             var webhook_url = '<?php echo(get_option('webhook_address')) ?>';
             var netlify_user_agent = '<?php echo(get_option('netlify_user_agent')) ?>';
@@ -299,7 +340,7 @@ class deployWebhook {
                 }
 
                 $button.addClass('running').css('opacity', '0.5');
-                
+
                 netlifyDeploy().done(function() {
                     var $badge = $('#admin-bar-netlify-deploy-status-badge');
 
@@ -348,15 +389,25 @@ class deployWebhook {
 
             add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
         }
+
+        if ( current_user_can( $run_deploys ) ) {
+            $sub_page_title = 'Schedule Builds';
+            $sub_menu_title = 'Schedule Builds';
+            $sub_capability = 'manage_options';
+            $sub_slug = 'schedule_webhook_fields';
+            $sub_callback = array( $this, 'plugin_settings_schedule_content' );
+
+            add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback );
+        }
+
         if ( current_user_can( $adjust_settings ) ) {
             $sub_page_title = 'Developer Settings';
             $sub_menu_title = 'Developer Settings';
             $sub_capability = 'manage_options';
-            $sub_slug = 'deploy_webhook_fields_sub';
-            $sub_callback = array( $this, 'plugin_settings_subpage_content' );
+            $sub_slug = 'developer_webhook_fields';
+            $sub_callback = array( $this, 'plugin_settings_developer_content' );
 
             add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback );
-
         }
 
 
@@ -379,66 +430,89 @@ class deployWebhook {
     * @since 1.0.0
     **/
     public function setup_sections() {
-        add_settings_section( 'main_section', 'Webhook Settings', array( $this, 'section_callback' ), 'deploy_webhook_fields' );
+        add_settings_section( 'schedule_section', 'Scheduling Settings', array( $this, 'section_callback' ), 'schedule_webhook_fields' );
+        add_settings_section( 'developer_section', 'Webhook Settings', array( $this, 'section_callback' ), 'developer_webhook_fields' );
     }
-    
+
     /**
-    * Check it wont break on build and deploy 
+    * Check it wont break on build and deploy
     *
     * @since 1.0.0
     **/
     public function section_callback( $arguments ) {
     	switch( $arguments['id'] ){
-    		case 'main_section':
+    		case 'developer_section':
     			echo 'The build and deploy status will not work without these fields entered corrently';
     			break;
     	}
     }
-    
+
+    /**
+    * Fields used for scheduler input data
+    *
+    * @since 1.1.0
+    **/
+    public function setup_scheduler_fields() {
+        $fields = array(
+          array(
+          'uid' => 'netlify_user_agent',
+          'label' => 'User-Agent Site Value',
+          'section' => 'schedule_section',
+          'type' => 'text',
+              'placeholder' => 'Website Name (and-website-url.netlify.com)',
+              'default' => '',
+          ),
+        );
+    	foreach( $fields as $field ){
+        	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'developer_webhook_fields', $field['section'], $field );
+            register_setting( 'scheduler_webhook_fields', $field['uid'] );
+    	}
+    }
+
     /**
     * Fields used for developer input data
     *
     * @since 1.0.0
     **/
-    public function setup_fields() {
+    public function setup_developer_fields() {
         $fields = array(
-        	array(
-        		'uid' => 'webhook_address',
-        		'label' => 'Webhook Build URL',
-        		'section' => 'main_section',
-        		'type' => 'text',
+          array(
+            'uid' => 'webhook_address',
+            'label' => 'Webhook Build URL',
+            'section' => 'developer_section',
+            'type' => 'text',
                 'placeholder' => 'https://',
                 'default' => '',
             ),
             array(
-        		'uid' => 'netlify_site_id',
-        		'label' => 'Netlify site_id',
-        		'section' => 'main_section',
-        		'type' => 'text',
+            'uid' => 'netlify_site_id',
+            'label' => 'Netlify site_id',
+            'section' => 'developer_section',
+            'type' => 'text',
                 'placeholder' => 'e.g. 5b8e927e-82e1-4786-4770-a9a8321yes43',
                 'default' => '',
             ),
             array(
-        		'uid' => 'netlify_api_key',
-        		'label' => 'Netlify API Key',
-        		'section' => 'main_section',
-        		'type' => 'text',
+            'uid' => 'netlify_api_key',
+            'label' => 'Netlify API Key',
+            'section' => 'developer_section',
+            'type' => 'text',
                 'placeholder' => 'GET O-AUTH TOKEN',
                 'default' => '',
-        	),
+          ),
             array(
-        		'uid' => 'netlify_user_agent',
-        		'label' => 'User-Agent Site Value',
-        		'section' => 'main_section',
-        		'type' => 'text',
+            'uid' => 'netlify_user_agent',
+            'label' => 'User-Agent Site Value',
+            'section' => 'developer_section',
+            'type' => 'text',
                 'placeholder' => 'Website Name (and-website-url.netlify.com)',
                 'default' => '',
-        	)
+          )
         );
-    	foreach( $fields as $field ){
-        	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'deploy_webhook_fields', $field['section'], $field );
-            register_setting( 'deploy_webhook_fields', $field['uid'] );
-    	}
+      foreach( $fields as $field ){
+          add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'developer_webhook_fields', $field['section'], $field );
+            register_setting( 'developer_webhook_fields', $field['uid'] );
+      }
     }
 
     /**
