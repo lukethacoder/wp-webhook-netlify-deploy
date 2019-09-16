@@ -56,12 +56,17 @@ class deployWebhook {
       // Listen to cron scheduler option updates
       add_action('update_option_enable_scheduled_builds', array( $this, 'build_schedule_options_updated' ), 10, 3 );
       add_action('update_option_select_schedule_builds', array( $this, 'build_schedule_options_updated' ), 10, 3 );
+      add_action('update_option_select_time_build', array( $this, 'build_schedule_options_updated' ), 10, 3 );
 
       // Trigger cron scheduler every WP load
-      add_action('wp', 'set_build_schedule_cron');
+      add_action('wp', array( $this, 'set_build_schedule_cron') );
 
       // Add custom schedules
-      add_filter( 'cron_schedules', array( $this, 'custom_cron_intervals') );
+      add_filter( 'cron_schedules', array( $this, 'custom_cron_intervals' ) );
+
+      // Link event to function
+      add_action('scheduled_netlify_build', array( $this, 'trigger_netlify_by_cron' ) );
+
     }
 
     /**
@@ -423,6 +428,12 @@ class deployWebhook {
         'interval' => 2635200,
         'display' => __('Once a month')
       );
+
+      $schedules['min'] = array(
+        'interval' => 100,
+        'display' => __('Once Weekly')
+      );
+
       return $schedules;
     }
 
@@ -479,6 +490,18 @@ class deployWebhook {
               'enable' => 'Enable'
               ),
             'default' =>  array()
+          ),
+          array(
+            'uid' => 'select_time_build',
+            'label' => 'Select Time to Build',
+            'section' => 'schedule_section',
+            'type' => 'select',
+            'options' => array(
+              'daily' => 'Daily',
+              'weekly' => 'Weekly',
+              'monthly' => 'Monthly'
+            ),
+            'default' => array('week')
           ),
           array(
             'uid' => 'select_schedule_builds',
@@ -669,7 +692,7 @@ class deployWebhook {
       if( $enable_builds ){
         if( !wp_next_scheduled('scheduled_netlify_build') ) {
           $schedule = get_option( 'select_schedule_builds' );
-          wp_schedule_event( time(), $schedule[0], 'scheduled_netlify_build' );
+          wp_schedule_event( time(), 'min', 'scheduled_netlify_build' );
         }
       } else {
         $this->deactivate_scheduled_cron();
@@ -684,9 +707,9 @@ class deployWebhook {
     **/
     public function deactivate_scheduled_cron(){
       // find out when the last event was scheduled
-    	$timestamp = wp_next_scheduled ('scheduled_netlify_build');
+    	$timestamp = wp_next_scheduled('scheduled_netlify_build');
     	// unschedule previous event if any
-    	wp_unschedule_event ($timestamp, 'scheduled_netlify_build');
+    	wp_unschedule_event($timestamp, 'scheduled_netlify_build');
     }
 
     /**
@@ -696,7 +719,17 @@ class deployWebhook {
     * @since 1.1.1
     **/
     public function trigger_netlify_by_cron(){
-
+      $netlify_user_agent = get_option('netlify_user_agent');
+      $webhook_url = get_option('webhook_address');
+      if($netlify_user_agent && $webhook_url){
+        $options = array(
+          'method'  => 'POST',
+          'header'  => array(
+            "User-Agent" => $netlify_user_agent,
+          )
+        );
+      	$response = wp_remote_post($webhook_url, $options);
+      }
     }
 
 }
