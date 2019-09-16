@@ -666,13 +666,11 @@ class deployWebhook {
     **/
     public function set_build_schedule_cron() {
       $enable_builds = get_option( 'enable_scheduled_builds' );
-      if( count($enable_builds) > 0 ){
-
+      if( $enable_builds ){
         if( !wp_next_scheduled('scheduled_netlify_build') ) {
           $schedule = get_option( 'select_schedule_builds' );
           wp_schedule_event( time(), $schedule[0], 'scheduled_netlify_build' );
         }
-
       } else {
         $this->deactivate_scheduled_cron();
       }
