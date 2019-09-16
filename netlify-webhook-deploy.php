@@ -482,7 +482,7 @@ class deployWebhook {
           ),
           array(
             'uid' => 'select_schedule_builds',
-            'label' => 'User-Agent Site Value',
+            'label' => 'Select Build Schedule',
             'section' => 'schedule_section',
             'type' => 'select',
             'options' => array(
@@ -648,7 +648,7 @@ class deployWebhook {
     **/
     public function build_schedule_options_updated() {
       $enable_builds = get_option( 'enable_scheduled_builds' );
-      if( count($enable_builds) > 0 ){
+      if( $enable_builds ){
         // Clean any previous setting
         $this->deactivate_scheduled_cron();
         // Reset schedule
