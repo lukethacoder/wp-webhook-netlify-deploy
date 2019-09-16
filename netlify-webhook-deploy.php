@@ -50,7 +50,7 @@ class deployWebhook {
       add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
 
       // Setup Cron Scheduling
-      add_action( 'schedule_cron', array( $this, 'schedule_cron' ) );
+      add_action( 'admin_init', array( $this, 'schedule_cron' ) );
     }
 
     /**
@@ -614,12 +614,13 @@ class deployWebhook {
     }
 
     /**
-    * Add Deploy Button and Deployment Status to admin bar
+    *
+    * Manage the cron jobs for triggering builds
     *
     * @since 1.1.1
     **/
     public function schedule_cron() {
-
+      $enable_builds = get_option( 'enable_scheduled_builds' );
     }
 
 }
