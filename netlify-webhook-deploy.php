@@ -490,13 +490,8 @@ class deployWebhook {
             'uid' => 'select_time_build',
             'label' => 'Select Time to Build',
             'section' => 'schedule_section',
-            'type' => 'select',
-            'options' => array(
-              'daily' => 'Daily',
-              'weekly' => 'Weekly',
-              'monthly' => 'Monthly'
-            ),
-            'default' => array('week')
+            'type' => 'time',
+            'default' => '00:00'
           ),
           array(
             'uid' => 'select_schedule_builds',
@@ -583,6 +578,9 @@ class deployWebhook {
             case 'number':
                 printf( '<input name="%1$s" id="%1$s" type="%2$s" placeholder="%3$s" value="%4$s" />', $arguments['uid'], $arguments['type'], $arguments['placeholder'], $value );
                 break;
+            case 'time':
+              printf( '<input name="%1$s" id="%1$s" type="time" value="%2$s" />', $arguments['uid'], $value );
+              break;
             case 'textarea':
                 printf( '<textarea name="%1$s" id="%1$s" placeholder="%2$s" rows="5" cols="50">%3$s</textarea>', $arguments['uid'], $arguments['placeholder'], $value );
                 break;
