@@ -414,7 +414,6 @@ class deployWebhook {
     }
 
     public function custom_cron_intervals($schedules) {
-      error_log('f');
       // add a 'weekly' interval
       $schedules['weekly'] = array(
         'interval' => 604800,
