@@ -685,7 +685,9 @@ class deployWebhook {
       if( $enable_builds ){
         if( !wp_next_scheduled('scheduled_netlify_build') ) {
           $schedule = get_option( 'select_schedule_builds' );
-          wp_schedule_event( time(), $schedule[0], 'scheduled_netlify_build' );
+          $set_time = get_option( 'select_time_build' );
+          $timestamp = strtotime( $set_time );
+          wp_schedule_event( $timestamp , $schedule[0], 'scheduled_netlify_build' );
         }
       } else {
         $this->deactivate_scheduled_cron();
