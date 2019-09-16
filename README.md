@@ -79,6 +79,8 @@ WordPress cron jobs are not 100% reliable, so a little bit of work is required t
 4. Select "Once per hour" from the common settings
 5. Add this command to the command input `wget -q -O - https://your-domain.com/wp-cron.php?doing_wp_cron`
 
+Now the Netlify hook (and all other cron jobs on your site) will run on time.
+
 ---
 
 ## Admin Bar
