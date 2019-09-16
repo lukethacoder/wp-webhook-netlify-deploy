@@ -62,6 +62,25 @@ From your WordPress dashboard
 
 ---
 
+## Scheduling Netlify Builds
+
+Using cron jobs, is it possible to set daily, weekly, or monthly builds.
+
+WordPress cron jobs are not 100% reliable, so a little bit of work is required to fix this.
+
+1. **Add** the following to your `wp-config.php` file - `define('DISABLE_WP_CRON', true);`
+2. Create a system cron
+
+### Creating a System Cron Job
+
+1. Log into your systems cpanel.
+2. Navigate to the Cron Jobs section - Search for "cron"
+3. Click "Cron Jobs" (If this does not show up you may not have access to this functionality)
+4. Select "Once per hour" from the common settings
+5. Add this command to the command input `wget -q -O - https://your-domain.com/wp-cron.php?doing_wp_cron`
+
+---
+
 ## Admin Bar
 
 A deploy button and the status badge of the last build is added to the admin bar. By default this will only be displayed to users that can `manage_options`.
@@ -96,8 +115,8 @@ Main Plugin page
 
 ## Links
 
-- [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
-- [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+-   [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+-   [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ---
 
@@ -105,18 +124,18 @@ Main Plugin page
 
 #### 1.1.0
 
-- Add Deploy Button and Deploy Status to admin bar
-- Add `manage_options` for devs to manage permissions
-- Nice comments in `php` code
-- Remove un-needed `add_submenu_items()` params
+-   Add Deploy Button and Deploy Status to admin bar
+-   Add `manage_options` for devs to manage permissions
+-   Nice comments in `php` code
+-   Remove un-needed `add_submenu_items()` params
 
 #### 1.0.0
 
-- Fixed UI
-- Seperate Developer Settings and User Build Screen
+-   Fixed UI
+-   Seperate Developer Settings and User Build Screen
 
 #### 0.1.0
 
-- Initial Release
+-   Initial Release
 
 View full changelog: [here](https://github.com/lukethacoder/deploy-webhook-button)
