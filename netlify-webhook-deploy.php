@@ -436,25 +436,35 @@ class deployWebhook {
     /**
     * Fields used for schedule input data
     *
+    * Based off this article:
+    * @link https://www.smashingmagazine.com/2016/04/three-approaches-to-adding-configurable-fields-to-your-plugin/
+    *
     * @since 1.1.0
     **/
     public function setup_schedule_fields() {
         $fields = array(
           array(
-          'uid' => 'enable_scheduled_builds',
-          'label' => 'Enable Scheduled Events',
-          'section' => 'schedule_section',
-          'type' => 'checkbox',
-              'options' => ['Enable'],
-              'default' => '',
+            'uid' => 'enable_scheduled_builds',
+            'label' => 'Enable Scheduled Events',
+            'section' => 'schedule_section',
+            'type' => 'checkbox',
+            'options' => array(
+              'true' => 'Enable'
+              ),
+            'default' =>  array()
           ),
           array(
-          'uid' => 'select_schedule_builds',
-          'label' => 'User-Agent Site Value',
-          'section' => 'schedule_section',
-          'type' => 'select',
-              'options' => ['Daily', 'Weekly', 'Monthly'],
-          ),
+            'uid' => 'select_schedule_builds',
+            'label' => 'User-Agent Site Value',
+            'section' => 'schedule_section',
+            'type' => 'select',
+            'options' => array(
+              'day' => 'Daily',
+              'week' => 'Weekly',
+              'month' => 'Monthly'
+            ),
+            'default' => array('week')
+          )
         );
     	foreach( $fields as $field ){
         	add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'schedule_webhook_fields', $field['section'], $field );
@@ -537,6 +547,7 @@ class deployWebhook {
                     $attributes = '';
                     $options_markup = '';
                     foreach( $arguments['options'] as $key => $label ){
+                                          echo $label; echo $key;
                         $options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
                     }
                     if( $arguments['type'] === 'multiselect' ){
