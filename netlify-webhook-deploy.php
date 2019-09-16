@@ -429,11 +429,6 @@ class deployWebhook {
         'display' => __('Once a month')
       );
 
-      $schedules['min'] = array(
-        'interval' => 100,
-        'display' => __('Once Weekly')
-      );
-
       return $schedules;
     }
 
@@ -692,7 +687,7 @@ class deployWebhook {
       if( $enable_builds ){
         if( !wp_next_scheduled('scheduled_netlify_build') ) {
           $schedule = get_option( 'select_schedule_builds' );
-          wp_schedule_event( time(), 'min', 'scheduled_netlify_build' );
+          wp_schedule_event( time(), $schedule[0], 'scheduled_netlify_build' );
         }
       } else {
         $this->deactivate_scheduled_cron();
