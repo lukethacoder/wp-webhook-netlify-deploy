@@ -39,6 +39,10 @@ class deployWebhook {
     * @since 1.0.0
     **/
     public function __construct() {
+
+      // Stop crons on uninstall
+      register_deactivation_hook(__FILE__,  array( $this, 'deactivate_scheduled_cron'));
+
     	// Hook into the admin menu
     	add_action( 'admin_menu', array( $this, 'create_plugin_settings_page' ) );
 
@@ -49,8 +53,15 @@ class deployWebhook {
       add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
       add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
 
-      // Setup Cron Scheduling
-      add_action( 'admin_init', array( $this, 'schedule_cron' ) );
+      // Listen to cron scheduler option updates
+      add_action('update_option_enable_scheduled_builds', array( $this, 'build_schedule_options_updated' ), 10, 3 );
+      add_action('update_option_select_schedule_builds', array( $this, 'build_schedule_options_updated' ), 10, 3 );
+
+      // Trigger cron scheduler every WP load
+      add_action('wp', 'set_build_schedule_cron');
+
+      // Add custom schedules
+      add_filter( 'cron_schedules', array( $this, 'custom_cron_intervals') );
     }
 
     /**
@@ -402,6 +413,20 @@ class deployWebhook {
 
     }
 
+    public function custom_cron_intervals($schedules) {
+      error_log('f');
+      // add a 'weekly' interval
+      $schedules['weekly'] = array(
+        'interval' => 604800,
+        'display' => __('Once Weekly')
+      );
+      $schedules['monthly'] = array(
+        'interval' => 2635200,
+        'display' => __('Once a month')
+      );
+      return $schedules;
+    }
+
     /**
     * Notify Admin on Successful Update
     *
@@ -617,10 +642,65 @@ class deployWebhook {
     *
     * Manage the cron jobs for triggering builds
     *
+    * Check if scheduled builds have been enabled, and pass to
+    * the enable function. Or disable.
+    *
     * @since 1.1.1
     **/
-    public function schedule_cron() {
+    public function build_schedule_options_updated() {
       $enable_builds = get_option( 'enable_scheduled_builds' );
+      if( count($enable_builds) > 0 ){
+        // Clean any previous setting
+        $this->deactivate_scheduled_cron();
+        // Reset schedule
+        $this->set_build_schedule_cron();
+      } else {
+        $this->deactivate_scheduled_cron();
+      }
+    }
+
+    /**
+    *
+    * Activate cron job to trigger build
+    *
+    * @since 1.1.1
+    **/
+    public function set_build_schedule_cron() {
+
+      $enable_builds = get_option( 'enable_scheduled_builds' );
+      if( count($enable_builds) > 0 ){
+
+        if( !wp_next_scheduled('scheduled_netlify_build') ) {
+          $schedule = get_option( 'select_schedule_builds' );
+          wp_schedule_event( time(), $schedule[0], 'scheduled_netlify_build' );
+        }
+
+      } else {
+        $this->deactivate_scheduled_cron();
+      }
+    }
+
+    /**
+    *
+    * Remove cron jobs set by this plugin
+    *
+    * @since 1.1.1
+    **/
+    public function deactivate_scheduled_cron(){
+      // // find out when the last event was scheduled
+    	// $timestamp = wp_next_scheduled ('scheduled_netlify_build');
+    	// // unschedule previous event if any
+    	// wp_unschedule_event ($timestamp, 'scheduled_netlify_build');
+    }
+
+    /**
+    *
+    * Trigger Netlify Build
+    *
+    * @since 1.1.1
+    **/
+    public function trigger_netlify_by_cron(){
+
     }
 
 }
