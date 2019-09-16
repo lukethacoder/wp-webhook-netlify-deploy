@@ -685,10 +685,10 @@ class deployWebhook {
     * @since 1.1.1
     **/
     public function deactivate_scheduled_cron(){
-      // // find out when the last event was scheduled
-    	// $timestamp = wp_next_scheduled ('scheduled_netlify_build');
-    	// // unschedule previous event if any
-    	// wp_unschedule_event ($timestamp, 'scheduled_netlify_build');
+      // find out when the last event was scheduled
+    	$timestamp = wp_next_scheduled ('scheduled_netlify_build');
+    	// unschedule previous event if any
+    	wp_unschedule_event ($timestamp, 'scheduled_netlify_build');
     }
 
     /**
