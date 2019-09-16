@@ -547,7 +547,6 @@ class deployWebhook {
                     $attributes = '';
                     $options_markup = '';
                     foreach( $arguments['options'] as $key => $label ){
-                                          echo $label; echo $key;
                         $options_markup .= sprintf( '<option value="%s" %s>%s</option>', $key, selected( $value[ array_search( $key, $value, true ) ], $key, false ), $label );
                     }
                     if( $arguments['type'] === 'multiselect' ){
