@@ -7,7 +7,7 @@
 Plugin Name: Webhook Netlify Deploy
 Plugin URI: http://github.com/lukethacoder/wp-webhook-netlify-deploy
 Description: Adds a Build Website button that sends a webhook request to build a netlify hosted website when clicked
-Version: 1.1.0
+Version: 1.1.1
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
@@ -48,6 +48,9 @@ class deployWebhook {
       add_action( 'admin_init', array( $this, 'setup_developer_fields' ) );
       add_action( 'admin_footer', array( $this, 'run_the_mighty_javascript' ) );
       add_action( 'admin_bar_menu', array( $this, 'add_to_admin_bar' ), 90 );
+
+      // Setup Cron Scheduling
+      add_action( 'schedule_cron', array( $this, 'schedule_cron' ) );
     }
 
     /**
@@ -95,7 +98,7 @@ class deployWebhook {
     /**
     * Schedule Builds (subpage) markup
     *
-    * @since 1.1.0
+    * @since 1.1.1
     **/
     public function plugin_settings_schedule_content() {?>
     	<div class="wrap">
@@ -607,6 +610,15 @@ class deployWebhook {
                 $admin_bar->add_node( $badge );
             }
         }
+
+    }
+
+    /**
+    * Add Deploy Button and Deployment Status to admin bar
+    *
+    * @since 1.1.1
+    **/
+    public function schedule_cron() {
 
     }
 
