@@ -563,7 +563,7 @@ class deployWebhook {
                     $iterator = 0;
                     foreach( $arguments['options'] as $key => $label ){
                         $iterator++;
-                        $options_markup .= sprintf( '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked( $value[ array_search( $key, $value, true ) ], $key, false ), $label, $iterator );
+                        $options_markup .= sprintf( '<label for="%1$s_%6$s"><input id="%1$s_%6$s" name="%1$s[]" type="%2$s" value="%3$s" %4$s /> %5$s</label><br/>', $arguments['uid'], $arguments['type'], $key, checked( $value && $value[ array_search( $key, $value, true ) ], $key, false ), $label, $iterator );
                     }
                     printf( '<fieldset>%s</fieldset>', $options_markup );
                 }
