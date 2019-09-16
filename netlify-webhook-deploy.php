@@ -486,9 +486,9 @@ class deployWebhook {
             'section' => 'schedule_section',
             'type' => 'select',
             'options' => array(
-              'day' => 'Daily',
-              'week' => 'Weekly',
-              'month' => 'Monthly'
+              'daily' => 'Daily',
+              'weekly' => 'Weekly',
+              'monthly' => 'Monthly'
             ),
             'default' => array('week')
           )
@@ -665,7 +665,6 @@ class deployWebhook {
     * @since 1.1.1
     **/
     public function set_build_schedule_cron() {
-
       $enable_builds = get_option( 'enable_scheduled_builds' );
       if( count($enable_builds) > 0 ){
 
