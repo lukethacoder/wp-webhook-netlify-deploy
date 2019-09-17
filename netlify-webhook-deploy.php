@@ -155,8 +155,8 @@ class deployWebhook {
             } ?>
     		<form method="POST" action="options.php">
                 <?php
-                    settings_fields( 'deploy_webhook_fields' );
-                    do_settings_sections( 'deploy_webhook_fields' );
+                    settings_fields( 'developer_webhook_fields' );
+                    do_settings_sections( 'developer_webhook_fields' );
                     submit_button();
                 ?>
     		</form>
@@ -178,7 +178,7 @@ class deployWebhook {
     public function run_the_mighty_javascript() {
         // TODO: split up javascript to allow to be dynamically imported as needed
         // $screen = get_current_screen();
-        // if ( $screen && $screen->parent_base != 'deploy_webhook_fields' && $screen->parent_base != 'deploy_webhook_fields_sub' ) {
+        // if ( $screen && $screen->parent_base != 'developer_webhook_fields' && $screen->parent_base != 'deploy_webhook_fields_sub' ) {
         //     return;
         // }
         ?>
@@ -186,7 +186,7 @@ class deployWebhook {
         console.log('run_the_mighty_javascript');
         jQuery(document).ready(function($) {
             var _this = this;
-            $( ".webhook-deploy_page_deploy_webhook_fields_sub td > input" ).css( "width", "100%");
+            $( ".webhook-deploy_page_developer_webhook_fields_sub td > input" ).css( "width", "100%");
 
             var webhook_url = '<?php echo(get_option('webhook_address')) ?>';
             var netlify_user_agent = '<?php echo(get_option('netlify_user_agent')) ?>';
@@ -409,7 +409,7 @@ class deployWebhook {
             $sub_page_title = 'Developer Settings';
             $sub_menu_title = 'Developer Settings';
             $sub_capability = 'manage_options';
-            $sub_slug = 'deploy_webhook_fields';
+            $sub_slug = 'developer_webhook_fields';
             $sub_callback = array( $this, 'plugin_settings_developer_content' );
 
             add_submenu_page( $slug, $sub_page_title, $sub_menu_title, $sub_capability, $sub_slug, $sub_callback );
@@ -450,7 +450,7 @@ class deployWebhook {
     **/
     public function setup_sections() {
         add_settings_section( 'schedule_section', 'Scheduling Settings', array( $this, 'section_callback' ), 'schedule_webhook_fields' );
-        add_settings_section( 'developer_section', 'Webhook Settings', array( $this, 'section_callback' ), 'deploy_webhook_fields' );
+        add_settings_section( 'developer_section', 'Webhook Settings', array( $this, 'section_callback' ), 'developer_webhook_fields' );
     }
 
     /**
@@ -553,8 +553,8 @@ class deployWebhook {
           )
         );
       foreach( $fields as $field ){
-          add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'deploy_webhook_fields', $field['section'], $field );
-            register_setting( 'deploy_webhook_fields', $field['uid'] );
+          add_settings_field( $field['uid'], $field['label'], array( $this, 'field_callback' ), 'developer_webhook_fields', $field['section'], $field );
+            register_setting( 'developer_webhook_fields', $field['uid'] );
       }
     }
 
