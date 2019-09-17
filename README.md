@@ -64,9 +64,13 @@ From your WordPress dashboard
 
 ## Scheduling Netlify Builds
 
-Using cron jobs, is it possible to set daily, weekly, or monthly builds.
+Is it possible to set daily, weekly, or monthly builds. Using this plugin. Navigate to the 'Schedule Builds' settings page to select build time and date.
 
-WordPress cron jobs are not 100% reliable, so a little bit of work is required to fix this.
+### Consistant Scheduling
+
+WordPress cron jobs are not 100% reliable as they are only fired when the site is visited. A little bit of work may be required to fix this.
+
+#### If you have access to your hosting cPanel
 
 1. **Add** the following to your `wp-config.php` file - `define('DISABLE_WP_CRON', true);`
 2. Create a system cron
@@ -78,6 +82,14 @@ WordPress cron jobs are not 100% reliable, so a little bit of work is required t
 3. Click "Cron Jobs" (If this does not show up you may not have access to this functionality)
 4. Select "Once per hour" from the common settings
 5. Add this command to the command input `wget -q -O - https://your-domain.com/wp-cron.php?doing_wp_cron`
+
+#### If you do not have access to your cPanel
+
+A solution to not being able to set up cPanel cron jobs is to use a third party scheduler. This ensures that at a certain time every day your WordPress cron events will fire.
+
+1. Set up an account with https://cron-job.org
+2. Login and navigate to "Cronjobs"
+3. Create a new cron job for `https://your-domain.com/wp-cron.php?doing_wp_cron` firing a minimum of once an hour every hour.
 
 Now the Netlify hook (and all other cron jobs on your site) will run on time.
 
