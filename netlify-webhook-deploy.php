@@ -65,7 +65,7 @@ class deployWebhook {
       add_filter( 'cron_schedules', array( $this, 'custom_cron_intervals' ) );
 
       // Link event to function
-      add_action('scheduled_netlify_build', array( $this, 'trigger_netlify_by_cron' ) );
+      add_action('scheduled_netlify_build', array( $this, 'fire_netlify_webhook' ) );
 
     }
 
@@ -713,7 +713,7 @@ class deployWebhook {
     *
     * @since 1.1.1
     **/
-    public function trigger_netlify_by_cron(){
+    public function fire_netlify_webhook(){
       $netlify_user_agent = get_option('netlify_user_agent');
       $webhook_url = get_option('webhook_address');
       if($netlify_user_agent && $webhook_url){
@@ -723,8 +723,9 @@ class deployWebhook {
             "User-Agent" => $netlify_user_agent,
           )
         );
-      	$response = wp_remote_post($webhook_url, $options);
+        return wp_remote_post($webhook_url, $options);
       }
+      return false;
     }
 
 }
