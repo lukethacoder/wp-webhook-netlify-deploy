@@ -478,30 +478,30 @@ class deployWebhook {
         $fields = array(
           array(
             'uid' => 'enable_scheduled_builds',
-            'label' => _('Enable Scheduled Events', 'webhook-netlify-deploy'),
+            'label' => __('Enable Scheduled Events', 'webhook-netlify-deploy'),
             'section' => 'schedule_section',
             'type' => 'checkbox',
             'options' => array(
-              'enable' => _('Enable', 'webhook-netlify-deploy'),
+              'enable' => __('Enable', 'webhook-netlify-deploy'),
               ),
             'default' =>  array()
           ),
           array(
             'uid' => 'select_time_build',
-            'label' => _('Select Time to Build', 'webhook-netlify-deploy'),
+            'label' => __('Select Time to Build', 'webhook-netlify-deploy'),
             'section' => 'schedule_section',
             'type' => 'time',
             'default' => '00:00'
           ),
           array(
             'uid' => 'select_schedule_builds',
-            'label' => _('Select Build Schedule', 'webhook-netlify-deploy'),
+            'label' => __('Select Build Schedule', 'webhook-netlify-deploy'),
             'section' => 'schedule_section',
             'type' => 'select',
             'options' => array(
-              'daily' => _('Daily', 'webhook-netlify-deploy'),
-              'weekly' => _('Weekly', 'webhook-netlify-deploy'),
-              'monthly' => _('Monthly', 'webhook-netlify-deploy'),
+              'daily' => __('Daily', 'webhook-netlify-deploy'),
+              'weekly' => __('Weekly', 'webhook-netlify-deploy'),
+              'monthly' => __('Monthly', 'webhook-netlify-deploy'),
             ),
             'default' => array('week')
           )
@@ -521,7 +521,7 @@ class deployWebhook {
         $fields = array(
           array(
             'uid' => 'webhook_address',
-            'label' => _('Webhook Build URL', 'webhook-netlify-deploy'),
+            'label' => __('Webhook Build URL', 'webhook-netlify-deploy'),
             'section' => 'developer_section',
             'type' => 'text',
                 'placeholder' => 'https://',
@@ -529,7 +529,7 @@ class deployWebhook {
             ),
             array(
             'uid' => 'netlify_site_id',
-            'label' => _('Netlify site_id', 'webhook-netlify-deploy'),
+            'label' => __('Netlify site_id', 'webhook-netlify-deploy'),
             'section' => 'developer_section',
             'type' => 'text',
                 'placeholder' => 'e.g. 5b8e927e-82e1-4786-4770-a9a8321yes43',
@@ -537,15 +537,15 @@ class deployWebhook {
             ),
             array(
             'uid' => 'netlify_api_key',
-            'label' => _('Netlify API Key', 'webhook-netlify-deploy'),
+            'label' => __('Netlify API Key', 'webhook-netlify-deploy'),
             'section' => 'developer_section',
             'type' => 'text',
-                'placeholder' => _('GET O-AUTH TOKEN', 'webhook-netlify-deploy'),
+                'placeholder' => __('GET O-AUTH TOKEN', 'webhook-netlify-deploy'),
                 'default' => '',
           ),
             array(
             'uid' => 'netlify_user_agent',
-            'label' => _('User-Agent Site Value', 'webhook-netlify-deploy'),
+            'label' => __('User-Agent Site Value', 'webhook-netlify-deploy'),
             'section' => 'developer_section',
             'type' => 'text',
                 'placeholder' => 'Website Name (and-website-url.netlify.com)',
