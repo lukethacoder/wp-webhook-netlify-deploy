@@ -395,7 +395,7 @@ class deployWebhook {
             add_menu_page( $page_title, $menu_title, $capability, $slug, $callback, $icon, $position );
         }
 
-        if ( current_user_can( $run_deploys ) ) {
+        if ( current_user_can( $adjust_settings ) ) {
             $sub_page_title = 'Schedule Builds';
             $sub_menu_title = 'Schedule Builds';
             $sub_capability = 'manage_options';
