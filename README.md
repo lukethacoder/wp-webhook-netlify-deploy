@@ -136,6 +136,10 @@ Main Plugin page
 
 ## Changelog
 
+#### 1.1.1
+
+- Bug fix for new permission hooks not working for "Webhook Deploy" menu and "Developer Settings" submenu
+
 #### 1.1.0
 
 -   Add Deploy Button and Deploy Status to admin bar
