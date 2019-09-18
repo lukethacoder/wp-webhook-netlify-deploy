@@ -186,7 +186,7 @@ class deployWebhook {
         console.log('run_the_mighty_javascript');
         jQuery(document).ready(function($) {
             var _this = this;
-            $( ".webhook-deploy_page_developer_webhook_fields_sub td > input" ).css( "width", "100%");
+            $( ".webhook-deploy_page_developer_webhook_fields td > input" ).css( "width", "100%");
 
             var webhook_url = '<?php echo(get_option('webhook_address')) ?>';
             var netlify_user_agent = '<?php echo(get_option('netlify_user_agent')) ?>';
