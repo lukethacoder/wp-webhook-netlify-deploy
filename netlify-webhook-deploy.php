@@ -398,7 +398,7 @@ class deployWebhook {
         if ( current_user_can( $adjust_settings ) ) {
             $sub_page_title = 'Schedule Builds';
             $sub_menu_title = 'Schedule Builds';
-            $sub_capability = 'manage_options';
+            $sub_capability = $adjust_settings;
             $sub_slug = 'schedule_webhook_fields';
             $sub_callback = array( $this, 'plugin_settings_schedule_content' );
 
