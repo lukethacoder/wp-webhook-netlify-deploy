@@ -41,6 +41,10 @@ From your WordPress dashboard
 
 == Changelog ==
 
+= 1.1.2 =
+* Added Netlify scheduling settings
+* Refactored settings names to allow easier scaling
+
 = 1.1.1 =
 * Bug fix for new permission hooks not working for "Webhook Deploy" menu and "Developer Settings" submenu
 

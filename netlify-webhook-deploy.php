@@ -7,7 +7,7 @@
 Plugin Name: Webhook Netlify Deploy
 Plugin URI: http://github.com/lukethacoder/wp-webhook-netlify-deploy
 Description: Adds a Build Website button that sends a webhook request to build a netlify hosted website when clicked
-Version: 1.1.1
+Version: 1.1.2
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
@@ -114,7 +114,7 @@ class deployWebhook {
     /**
     * Schedule Builds (subpage) markup
     *
-    * @since 1.1.1
+    * @since 1.1.2
     **/
     public function plugin_settings_schedule_content() {?>
     	<div class="wrap">
@@ -660,7 +660,7 @@ class deployWebhook {
     * Check if scheduled builds have been enabled, and pass to
     * the enable function. Or disable.
     *
-    * @since 1.1.1
+    * @since 1.1.2
     **/
     public function build_schedule_options_updated() {
       $enable_builds = get_option( 'enable_scheduled_builds' );
@@ -678,7 +678,7 @@ class deployWebhook {
     *
     * Activate cron job to trigger build
     *
-    * @since 1.1.1
+    * @since 1.1.2
     **/
     public function set_build_schedule_cron() {
       $enable_builds = get_option( 'enable_scheduled_builds' );
@@ -698,7 +698,7 @@ class deployWebhook {
     *
     * Remove cron jobs set by this plugin
     *
-    * @since 1.1.1
+    * @since 1.1.2
     **/
     public function deactivate_scheduled_cron(){
       // find out when the last event was scheduled
@@ -711,7 +711,7 @@ class deployWebhook {
     *
     * Trigger Netlify Build
     *
-    * @since 1.1.1
+    * @since 1.1.2
     **/
     public function fire_netlify_webhook(){
       $netlify_user_agent = get_option('netlify_user_agent');
