@@ -8,6 +8,8 @@ Easily deploy static sites using Wordpress and Netlify
 
 **Build** Quickly and easily send webhooks to build your Netlify
 
+**Schedule** Schedule daily, weekly or monthly builds
+
 **Status** Check the status of your latest build to see if it was successful without even leaving Wordpress
 
 ---
@@ -129,8 +131,8 @@ Main Plugin page
 
 ## Links
 
-- [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
-- [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+-   [Website](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
+-   [Documentation](https://github.com/lukethacoder/wp-netlify-webhook-deploy)
 
 ---
 
@@ -138,27 +140,27 @@ Main Plugin page
 
 #### 1.1.2
 
-- Added Netlify scheduling settings
-- Refactored settings names to allow easier scaling
+-   Added Netlify scheduling settings
+-   Refactored settings names to allow easier scaling
 
 #### 1.1.1
 
-- Bug fix for new permission hooks not working for "Webhook Deploy" menu and "Developer Settings" submenu
+-   Bug fix for new permission hooks not working for "Webhook Deploy" menu and "Developer Settings" submenu
 
 #### 1.1.0
 
-- Add Deploy Button and Deploy Status to admin bar
-- Add `manage_options` for devs to manage permissions
-- Nice comments in `php` code
-- Remove un-needed `add_submenu_items()` params
+-   Add Deploy Button and Deploy Status to admin bar
+-   Add `manage_options` for devs to manage permissions
+-   Nice comments in `php` code
+-   Remove un-needed `add_submenu_items()` params
 
 #### 1.0.0
 
-- Fixed UI
-- Seperate Developer Settings and User Build Screen
+-   Fixed UI
+-   Seperate Developer Settings and User Build Screen
 
 #### 0.1.0
 
-- Initial Release
+-   Initial Release
 
 View full changelog: [here](https://github.com/lukethacoder/deploy-webhook-button)

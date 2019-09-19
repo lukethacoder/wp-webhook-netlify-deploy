@@ -1,5 +1,5 @@
 === Deploy Webhook Button ===
-Contributors: lukesecomb
+Contributors: lukesecomb, robertmarshall
 Tags: webhook, netlify, deploy, gatsbyjs, static, build
 Requires at least: 4.4.0
 Tested up to: 5.2.1
