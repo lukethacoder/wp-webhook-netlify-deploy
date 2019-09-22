@@ -7,7 +7,7 @@
 Plugin Name: Webhook Netlify Deploy
 Plugin URI: http://github.com/lukethacoder/wp-webhook-netlify-deploy
 Description: Adds a Build Website button that sends a webhook request to build a netlify hosted website when clicked
-Version: 1.1.2
+Version: 1.1.3
 Author: Luke Secomb
 Author URI: https://lukesecomb.digital
 License: GPLv3 or later
