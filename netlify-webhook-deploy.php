@@ -76,38 +76,42 @@ class deployWebhook {
     **/
     public function plugin_settings_page_content() {?>
     	<div class="wrap">
-    		<h2>Webhook Netlify Deploy</h2>
-            <hr>
+    		<h2><?php _e('Webhook Netlify Deploy', 'webhook-netlify-deploy');?></h2>
+        <hr>
+        <h3><?php _e('Build Website', 'webhook-netlify-deploy');?></h3>
+        <button id="build_button" class="button button-primary" name="submit" type="submit">
+          <?php _e('Build Site', 'webhook-netlify-deploy');?>
+        </button>
+        <br>
+        <p id="build_status" style="font-size: 12px; margin: 0;"></p>
+        <p style="font-size: 12px">*<?php _e('Do not abuse the Build Site button', 'webhook-netlify-deploy');?>*</p><br>
+        <hr>
+        <h3><?php _e('Deploy Status', 'webhook-netlify-deploy');?></h3>
+        <button id="status_button" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">
+          <?php _e('Get Deploys Status', 'webhook-netlify-deploy');?>
+        </button>
 
-            <h3>Build Website</h3>
-            <button id="build_button" class="button button-primary" name="submit" type="submit">Build Site</button><br>
-            <p id="build_status" style="font-size: 12px; margin: 0;"></p>
-            <p style="font-size: 12px">*Do not abuse the Build Site button*</p><br>
+        <div style="margin: 0 0 16px;">
+            <a id="build_img_link" href="">
+                <img id="build_img" src=""/>
+            </a>
+        </div>
+        <div>
+            <!-- <p id="deploy_status"></p> -->
+            <p id="deploy_id"></p>
+            <div style="display: flex;"><p id="deploy_finish_time"></p><p id="deploy_loading"></p></div>
+            <p id="deploy_ssl_url"></p>
+        </div>
 
-            <hr>
+        <div id="deploy_preview"></div>
 
-            <h3>Deploy Status</h3>
-            <button id="status_button" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">Get Deploys Status</button>
+        <hr>
 
-            <div style="margin: 0 0 16px;">
-                <a id="build_img_link" href="">
-                    <img id="build_img" src=""/>
-                </a>
-            </div>
-            <div>
-                <!-- <p id="deploy_status"></p> -->
-                <p id="deploy_id"></p>
-                <div style="display: flex;"><p id="deploy_finish_time"></p><p id="deploy_loading"></p></div>
-                <p id="deploy_ssl_url"></p>
-            </div>
-
-            <div id="deploy_preview"></div>
-
-            <hr>
-
-            <h3>Previous Builds</h3>
-            <button id="previous_deploys" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">Get All Previous Deploys</button>
-            <ul id="previous_deploys_container" style="list-style: none;"></ul>
+        <h3><?php _e('Previous Builds', 'webhook-netlify-deploy');?></h3>
+        <button id="previous_deploys" class="button button-primary" name="submit" type="submit" style="margin: 0 0 16px;">
+          <?php _e('Get All Previous Deploys', 'webhook-netlify-deploy');?>
+        </button>
+        <ul id="previous_deploys_container" style="list-style: none;"></ul>
     	</div> <?php
     }
 
@@ -118,9 +122,8 @@ class deployWebhook {
     **/
     public function plugin_settings_schedule_content() {?>
     	<div class="wrap">
-    		<h1>Schedule Netlify Builds</h1>
-    		<p>This section allows regular Netlify builds to be scheduled.</p>
-
+    		<h1><?php _e('Schedule Netlify Builds', 'webhook-netlify-deploy');?></h1>
+    		<p><?php _e('This section allows regular Netlify builds to be scheduled.', 'webhook-netlify-deploy');?></p>
         <hr>
 
         <?php
@@ -145,8 +148,8 @@ class deployWebhook {
     **/
     public function plugin_settings_developer_content() {?>
     	<div class="wrap">
-    		<h1>Developer Settings</h1>
-    		<p>Do not change this if you dont know what you are doing</p>
+    		<h1><?php _e('Developer Settings', 'webhook-netlify-deploy');?></h1>
+    		<p><?php _e('Do not change this if you dont know what you are doing.', 'webhook-netlify-deploy');?></p>
             <hr>
 
             <?php
@@ -162,9 +165,9 @@ class deployWebhook {
     		</form>
 
             <footer>
-                <h3>Extra Info</h3>
-                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy">Plugin Docs</a></p>
-                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy">Project Github</a></p>
+                <h3><?php _e('Extra Info', 'webhook-netlify-deploy');?></h3>
+                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy"><?php _e('Plugin Docs', 'webhook-netlify-deploy');?></a></p>
+                <p><a href="https://github.com/lukethacoder/wp-webhook-netlify-deploy"><?php _e('Project Github', 'webhook-netlify-deploy');?></a></p>
             </footer>
 
     	</div> <?php
@@ -384,8 +387,8 @@ class deployWebhook {
         $adjust_settings = apply_filters( 'netlify_adjust_settings_capability', 'manage_options' );
 
         if ( current_user_can( $run_deploys ) ) {
-            $page_title = 'Deploy to Netlify';
-            $menu_title = 'Webhook Deploy';
+            $page_title = __('Deploy to Netlify', 'webhook-netlify-deploy');
+            $menu_title = __('Webhook Deploy', 'webhook-netlify-deploy');
             $capability = $run_deploys;
             $slug = 'deploy_webhook_fields';
             $callback = array( $this, 'plugin_settings_page_content' );
@@ -396,8 +399,8 @@ class deployWebhook {
         }
 
         if ( current_user_can( $adjust_settings ) ) {
-            $sub_page_title = 'Schedule Builds';
-            $sub_menu_title = 'Schedule Builds';
+            $sub_page_title = __('Schedule Builds', 'webhook-netlify-deploy');
+            $sub_menu_title = __('Schedule Builds', 'webhook-netlify-deploy');
             $sub_capability = $adjust_settings;
             $sub_slug = 'schedule_webhook_fields';
             $sub_callback = array( $this, 'plugin_settings_schedule_content' );
@@ -406,8 +409,8 @@ class deployWebhook {
         }
 
         if ( current_user_can( $adjust_settings ) ) {
-            $sub_page_title = 'Developer Settings';
-            $sub_menu_title = 'Developer Settings';
+            $sub_page_title = __('Developer Settings', 'webhook-netlify-deploy');
+            $sub_menu_title = __('Developer Settings', 'webhook-netlify-deploy');
             $sub_capability = $adjust_settings;
             $sub_slug = 'developer_webhook_fields';
             $sub_callback = array( $this, 'plugin_settings_developer_content' );
@@ -439,8 +442,9 @@ class deployWebhook {
     **/
     public function admin_notice() { ?>
         <div class="notice notice-success is-dismissible">
-            <p>Your settings have been updated!</p>
-        </div><?php
+            <p><?php _e('Your settings have been updated!', 'webhook-netlify-deploy');?></p>
+        </div>
+    <?php
     }
 
     /**
@@ -449,8 +453,8 @@ class deployWebhook {
     * @since 1.0.0
     **/
     public function setup_sections() {
-        add_settings_section( 'schedule_section', 'Scheduling Settings', array( $this, 'section_callback' ), 'schedule_webhook_fields' );
-        add_settings_section( 'developer_section', 'Webhook Settings', array( $this, 'section_callback' ), 'developer_webhook_fields' );
+        add_settings_section( 'schedule_section', __('Scheduling Settings', 'webhook-netlify-deploy'), array( $this, 'section_callback' ), 'schedule_webhook_fields' );
+        add_settings_section( 'developer_section', __('Webhook Settings', 'webhook-netlify-deploy'), array( $this, 'section_callback' ), 'developer_webhook_fields' );
     }
 
     /**
@@ -461,7 +465,7 @@ class deployWebhook {
     public function section_callback( $arguments ) {
     	switch( $arguments['id'] ){
     		case 'developer_section':
-    			echo 'The build and deploy status will not work without these fields entered corrently';
+    			echo __('The build and deploy status will not work without these fields entered corrently', 'webhook-netlify-deploy');
     			break;
     	}
     }
@@ -629,7 +633,7 @@ class deployWebhook {
             if ( $webhook_address ) {
                 $button = array(
                     'id' => 'netlify-deploy-button',
-                    'title' => '<div style="cursor: pointer;"><span class="ab-icon dashicons dashicons-hammer"></span> <span class="ab-label">Deploy site</span></div>'
+                    'title' => '<div style="cursor: pointer;"><span class="ab-icon dashicons dashicons-hammer"></span> <span class="ab-label">'. __('Deploy Site', 'webhook-netlify-deploy') .'</span></div>'
                 );
 
                 $admin_bar->add_node( $button );
@@ -643,7 +647,7 @@ class deployWebhook {
                 $badge = array(
                     'id' => 'netlify-deploy-status-badge',
                     'title' => sprintf( '<div style="display: flex; height: 100%%; align-items: center;">
-                            <img id="admin-bar-netlify-deploy-status-badge" src="https://api.netlify.com/api/v1/badges/%s/deploy-status" alt="Netlify deply status" style="width: auto; height: 16px;" />
+                            <img id="admin-bar-netlify-deploy-status-badge" src="https://api.netlify.com/api/v1/badges/%s/deploy-status" alt="'. __('Netlify deply status', 'webhook-netlify-deploy') .'" style="width: auto; height: 16px;" />
                         </div>', $netlify_site_id )
                 );
 
