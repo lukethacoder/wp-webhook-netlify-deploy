@@ -41,6 +41,9 @@ From your WordPress dashboard
 
 == Changelog ==
 
+= 1.1.3 =
+* Translated strings added to php code
+
 = 1.1.2 =
 * Added Netlify scheduling settings
 * Refactored settings names to allow easier scaling
